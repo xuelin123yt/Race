@@ -26,6 +26,10 @@ class GameViewModel: ViewModel() {
     var isRolling by mutableStateOf(false)
         private set
 
+    // 分數
+    var score by mutableStateOf(0)
+        private set
+
     // 設定螢幕寬度與高度
     fun SetGameSize(w: Float, h: Float) {
         screenWidthPx = w
@@ -55,6 +59,7 @@ class GameViewModel: ViewModel() {
                 // 碰到右邊界就從左邊重新開始（保持相同的 Y 座標）
                 if (ballX >= screenWidthPx - 100f) {
                     ballX = 100f
+                    score++ // 分數加 1
                 }
             }
         }
@@ -63,5 +68,10 @@ class GameViewModel: ViewModel() {
     // 停止滾動
     fun stopRolling() {
         isRolling = false
+    }
+
+    // 重置分數
+    fun resetScore() {
+        score = 0
     }
 }

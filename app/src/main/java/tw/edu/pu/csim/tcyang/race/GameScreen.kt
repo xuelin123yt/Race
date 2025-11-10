@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlin.math.sqrt
 
 @Composable
@@ -64,7 +65,9 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                 .padding(16.dp)
         ) {
             Text(
-                text = message + gameViewModel.screenWidthPx.toString() + "*" + gameViewModel.screenHeightPx.toString()
+                text = message + gameViewModel.screenWidthPx.toString() + "*" + gameViewModel.screenHeightPx.toString() + " 王奕翔 分數: ${gameViewModel.score}",
+                fontSize = 16.sp,
+                color = Color.Black
             )
 
             Button(
