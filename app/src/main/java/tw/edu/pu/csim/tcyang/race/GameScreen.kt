@@ -25,7 +25,6 @@ import kotlin.math.sqrt
 
 @Composable
 fun GameScreen(message: String, gameViewModel: GameViewModel) {
-    // 載入多張圖片
     val imageBitmaps = listOf(
         ImageBitmap.imageResource(R.drawable.horse0),
         ImageBitmap.imageResource(R.drawable.horse1),
@@ -46,13 +45,11 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                         onDrag = { change, dragAmount ->
                             change.consume()
 
-                            // 檢查是否在拖動球
                             val dx = change.position.x - gameViewModel.ballX
                             val dy = change.position.y - gameViewModel.ballY
                             val distance = sqrt(dx * dx + dy * dy)
 
                             if (distance <= 100f) {
-                                // 拖動球時更新位置
                                 gameViewModel.updateBallPosition(
                                     gameViewModel.ballX + dragAmount.x,
                                     gameViewModel.ballY + dragAmount.y
@@ -62,14 +59,12 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                     )
                 }
         ) {
-            // 繪製圓形（使用 ViewModel 中的位置）
             drawCircle(
                 color = Color.Red,
                 radius = 100f,
                 center = Offset(gameViewModel.ballX, gameViewModel.ballY)
             )
 
-            // 繪製 3 匹馬
             for (i in 0..2) {
                 drawImage(
                     image = imageBitmaps[gameViewModel.horses[i].number],
@@ -82,14 +77,13 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
             }
         }
 
-        // 左上角的文字和按鈕（垂直排列）
         Column(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(16.dp)
         ) {
             Text(
-                text = message + gameViewModel.screenWidthPx.toString() + "*" + gameViewModel.screenHeightPx.toString() + " 王奕翔 分數: ${gameViewModel.score}",
+                text = "賽馬遊戲(作者：王奕翔)。" + gameViewModel.screenWidthPx.toString() + "*" + gameViewModel.screenHeightPx.toString() + " 分數: ${gameViewModel.score}",
                 fontSize = 16.sp,
                 color = Color.Black
             )
@@ -105,6 +99,16 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Text(text = if (gameViewModel.isRolling) "停止滾動" else "開始滾動")
+            }
+
+            // 顯示獲勝訊息
+            if (gameViewModel.winnerMessage.isNotEmpty()) {
+                Text(
+                    text = gameViewModel.winnerMessage,
+                    fontSize = 32.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
             }
         }
     }
