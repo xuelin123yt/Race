@@ -25,8 +25,13 @@ import kotlin.math.sqrt
 
 @Composable
 fun GameScreen(message: String, gameViewModel: GameViewModel) {
-    //載入圖片
-    val imageBitmap = ImageBitmap.imageResource(R.drawable.horse0)
+    // 載入多張圖片
+    val imageBitmaps = listOf(
+        ImageBitmap.imageResource(R.drawable.horse0),
+        ImageBitmap.imageResource(R.drawable.horse1),
+        ImageBitmap.imageResource(R.drawable.horse2),
+        ImageBitmap.imageResource(R.drawable.horse3)
+    )
 
     Box(
         modifier = Modifier
@@ -63,11 +68,18 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                 radius = 100f,
                 center = Offset(gameViewModel.ballX, gameViewModel.ballY)
             )
-            drawImage(
-                image = imageBitmap,
-                dstOffset = IntOffset(0, 100),
-                dstSize = IntSize(300, 300)
-            )
+
+            // 繪製 3 匹馬
+            for (i in 0..2) {
+                drawImage(
+                    image = imageBitmaps[gameViewModel.horses[i].number],
+                    dstOffset = IntOffset(
+                        gameViewModel.horses[i].horseX,
+                        gameViewModel.horses[i].horseY
+                    ),
+                    dstSize = IntSize(200, 200)
+                )
+            }
         }
 
         // 左上角的文字和按鈕（垂直排列）
@@ -87,7 +99,7 @@ fun GameScreen(message: String, gameViewModel: GameViewModel) {
                     if (gameViewModel.isRolling) {
                         gameViewModel.stopRolling()
                     } else {
-                        gameViewModel.startRolling()
+                        gameViewModel.StartGame()
                     }
                 },
                 modifier = Modifier.padding(top = 8.dp)

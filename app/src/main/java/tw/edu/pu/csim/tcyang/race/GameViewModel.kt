@@ -30,13 +30,22 @@ class GameViewModel: ViewModel() {
     var score by mutableStateOf(0)
         private set
 
+    // 改用馬的列表（產生 3 匹馬）
+    val horses = mutableListOf<Horse>()
+
     // 設定螢幕寬度與高度
     fun SetGameSize(w: Float, h: Float) {
         screenWidthPx = w
         screenHeightPx = h
-        // 初始化球的位置在左下角
-        ballX = 100f
+
+        // 設定紅圈的圓心（避開按鈕區域，放在螢幕下方中間）
+        ballX = w / 2f
         ballY = h - 100f
+
+        // 產生 3 匹馬的物件
+        for (i in 0..2) {
+            horses.add(Horse(i))
+        }
     }
 
     // 更新球的位置（拖移時使用）
@@ -45,21 +54,29 @@ class GameViewModel: ViewModel() {
         ballY = y.coerceIn(100f, screenHeightPx - 100f)
     }
 
-    // 開始滾動
-    fun startRolling() {
+    // 開始遊戲
+    fun StartGame() {
         if (isRolling) return
 
         isRolling = true
 
         viewModelScope.launch {
-            while (isRolling) {
+            while (isRolling) { // 無限循環，每秒增加一次
                 delay(16) // 約 60 FPS
-                ballX += 3f // 每次移動 3 像素
 
-                // 碰到右邊界就從左邊重新開始（保持相同的 Y 座標）
+                // 球的移動
+                ballX += 3f
                 if (ballX >= screenWidthPx - 100f) {
                     ballX = 100f
-                    score++ // 分數加 1
+                    score++
+                }
+
+                // 讓每匹馬都能奔跑
+                for (i in 0..2) {
+                    horses[i].HorseRun()
+                    if (horses[i].horseX >= screenWidthPx - 200) {
+                        horses[i].horseX = 0
+                    }
                 }
             }
         }
